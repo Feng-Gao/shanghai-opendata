@@ -11,7 +11,7 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 #NOTE that we parse dataproduct and dataapi seperately and the dirty solution is manually replace the url and set index accordingly
-#to crawl both product and api, so do not forget to set file writer method to 'a' when you work on api list
+#this version is for dataproduct only now
 base_url = 'http://www.datashanghai.gov.cn/query!queryProduct.action?currentPage='
 index = 1
 #manually check on the website and set the max_index accordingly
@@ -38,6 +38,7 @@ meta_dict = {
             '数据提供方：'.encode('utf-8'):'org',
             '附件下载：'.encode('utf-8'):'',
             }
+package_count = 0
 
 for i in range(index,max_index+1):
     url = base_url + str(i)
@@ -48,7 +49,9 @@ for i in range(index,max_index+1):
     package_blocks = soup.find_all('dt')[5:]
     for p in package_blocks:
         #we create a package_dict to store
-        package_dict = {'url':'',
+        package_dict = {
+                'id':0,
+                'url':'',
                 'name':'',
                 'desc':'',
                 'org':'',
@@ -67,6 +70,8 @@ for i in range(index,max_index+1):
         #for each package block on the list page, we parse the url to detail page, and package title
         package_dict['url'] = "http://www.datashanghai.gov.cn/"+p.a['href']
         package_dict['name'] = p.a['title']
+        package_dict['id'] = package_count+1
+        package_count += 1
         print(package_dict['url'])
         print(package_dict['name'])
         result = requests.get(package_dict['url'],headers=headers)
@@ -97,4 +102,4 @@ for i in range(index,max_index+1):
                 # for meta_dict elements that not mapped into package_dict it will create a '' key in package_dict
                 package_dict[meta_dict[key.encode('utf-8')]] = value
         del package_dict['']
-        scraperwiki.sqlite.save(unique_keys=['url'],data=package_dict)
+        scraperwiki.sqlite.save(unique_keys=['id'],data=package_dict)
