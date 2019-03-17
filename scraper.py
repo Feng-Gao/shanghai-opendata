@@ -54,7 +54,7 @@ package_dict = {'url':'',
 
 for i in range(index,max_index+1):
     url = base_url + str(i)
-    result = requests.get(taipei_url,headers=headers)
+    result = requests.get(url,headers=headers)
     soup = BeautifulSoup(result.content)
     #fetch all dt blocks and get rid of the first 5 as they are irrelevant
     package_blocks = soup.find_all('dt')[5:]
