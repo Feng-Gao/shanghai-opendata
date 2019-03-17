@@ -39,8 +39,16 @@ meta_dict = {
             '附件下载：'.encode('utf-8'):'',
             }
 
-#we create a package_dict to store
-package_dict = {'url':'',
+for i in range(index,max_index+1):
+    url = base_url + str(i)
+    print(url)
+    result = requests.get(url,headers=headers)
+    soup = BeautifulSoup(result.content,features="lxml")
+    #fetch all dt blocks and get rid of the first 5 as they are irrelevant
+    package_blocks = soup.find_all('dt')[5:]
+    for p in package_blocks:
+        #we create a package_dict to store
+        package_dict = {'url':'',
                 'name':'',
                 'desc':'',
                 'org':'',
@@ -55,16 +63,7 @@ package_dict = {'url':'',
                     'download':0
                     },
                 'format':''
-}
-
-for i in range(index,max_index+1):
-    url = base_url + str(i)
-    print(url)
-    result = requests.get(url,headers=headers)
-    soup = BeautifulSoup(result.content,features="lxml")
-    #fetch all dt blocks and get rid of the first 5 as they are irrelevant
-    package_blocks = soup.find_all('dt')[5:]
-    for p in package_blocks:
+               }
         #for each package block on the list page, we parse the url to detail page, and package title
         package_dict['url'] = "http://www.datashanghai.gov.cn/"+p.a['href']
         package_dict['name'] = p.a['title']
