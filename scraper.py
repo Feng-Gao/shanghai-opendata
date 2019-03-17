@@ -68,7 +68,7 @@ for i in range(index,max_index+1):
         #there are 4 tables on detail page
         tables = soup.find_all('table')
         #the first one contains metadata
-        metadata_table = table[0]
+        metadata_table = tables[0]
         trs =  metadata_table.find_all('tr')
         for tr in trs:
             key = re.sub('[\r\t\n ]+', '', tr.th.text)
