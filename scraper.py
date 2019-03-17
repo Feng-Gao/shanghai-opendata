@@ -5,6 +5,11 @@ from fake_useragent import UserAgent
 import re
 import scraperwiki
 
+import sys  
+
+reload(sys)  
+sys.setdefaultencoding('utf8')
+
 #NOTE that we parse dataproduct and dataapi seperately and the dirty solution is manually replace the url and set index accordingly
 #to crawl both product and api, so do not forget to set file writer method to 'a' when you work on api list
 base_url = 'http://www.datashanghai.gov.cn/query!queryProduct.action?currentPage='
@@ -55,7 +60,7 @@ package_dict = {'url':'',
 for i in range(index,max_index+1):
     url = base_url + str(i)
     result = requests.get(url,headers=headers)
-    soup = BeautifulSoup(result.content)
+    soup = BeautifulSoup(result.content,features="lxml")
     #fetch all dt blocks and get rid of the first 5 as they are irrelevant
     package_blocks = soup.find_all('dt')[5:]
     for p in package_blocks:
@@ -64,7 +69,7 @@ for i in range(index,max_index+1):
         package_dict['name'] = p.a['title']
         result = requests.get(package_dict['url'],headers=headers)
         #now for each package block, we fetch back its detail page and parse its metadata
-        soup = BeautifulSoup(result.content)
+        soup = BeautifulSoup(result.content,features="lxml")
         #there are 4 tables on detail page
         tables = soup.find_all('table')
         #the first one contains metadata
