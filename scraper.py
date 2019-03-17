@@ -73,11 +73,11 @@ for i in range(index,max_index+1):
         for tr in trs:
             key = re.sub('[\r\t\n ]+', '', tr.th.text)
             value = re.sub('[\r\t\n ]+', '', tr.td.text)
-            if key == '访问/下载次数：':
+            if key.encode('utf-8') == '访问/下载次数：'.encode('utf-8'):
                 view,download = value.split('/')
                 package_dict['count']['view'] = int(view)
                 package_dict['count']['download'] = int(download)
-            if key == '附件下载：':
+            if key.encode('utf-8') == '附件下载：'.encode('utf-8'):
                 #datashanghai only contains image-based format list on its data package
                 #we need to iterate each file's image to parse its format
                 imgs = tr.find_all(src=re.compile("images/"))
