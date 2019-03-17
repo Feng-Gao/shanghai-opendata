@@ -23,20 +23,20 @@ headers = {'User-Agent':ua.random}
 
 #we create a metadata dict as it might be possible that for some dataset some metadata may be missing or in wrong order
 meta_dict = {
-            '摘要：':'desc',
-            '应用场景：':'',
-            '数据标签：':'',
-            '关键字：':'tags',
-            '数据领域：':'topics',
-            '国家主题分类：':'',
-            '部门主题分类：':'',
-            '公开属性：':'',
-            '更新频度：':'frequency',
-            '首次发布日期：':'created',
-            '更新日期：':'updated',
-            '访问/下载次数：':'count',
-            '数据提供方：':'org',
-            '附件下载：':'',
+            '摘要：'.encode('utf-8'):'desc',
+            '应用场景：'.encode('utf-8'):'',
+            '数据标签：'.encode('utf-8'):'',
+            '关键字：'.encode('utf-8'):'tags',
+            '数据领域：'.encode('utf-8'):'topics',
+            '国家主题分类：'.encode('utf-8'):'',
+            '部门主题分类：'.encode('utf-8'):'',
+            '公开属性：'.encode('utf-8'):'',
+            '更新频度：'.encode('utf-8'):'frequency',
+            '首次发布日期：'.encode('utf-8'):'created',
+            '更新日期：'.encode('utf-8'):'updated',
+            '访问/下载次数：'.encode('utf-8'):'count',
+            '数据提供方：'.encode('utf-8'):'org',
+            '附件下载：'.encode('utf-8'):'',
             }
 
 #we create a package_dict to store
@@ -96,6 +96,6 @@ for i in range(index,max_index+1):
                 package_dict['format'] = format
             else:
                 # for meta_dict elements that not mapped into package_dict it will create a '' key in package_dict
-                package_dict[meta_dict[key]] = value
+                package_dict[meta_dict[key.encode('utf-8')]] = value
         del package_dict['']
         scraperwiki.sqlite.save(unique_keys=['url'],data=package_dict)
