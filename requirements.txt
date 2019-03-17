@@ -9,3 +9,4 @@ beautifulsoup4==4.4.0
 requests==2.21.0
 lxml==3.4.4
 cssselect==0.9.1
+fake_useragent==0.1.11
