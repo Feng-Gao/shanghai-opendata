@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
 import re
 import scraperwiki
+import datetime
 
 import sys  
 
@@ -50,6 +51,7 @@ for i in range(index,max_index+1):
     for p in package_blocks:
         #we create a package_dict to store
         package_dict = {
+                'today':datetime.date.today().strftime("%m/%d/%Y"),
                 'id':0,
                 'url':'',
                 'name':'',
@@ -102,4 +104,4 @@ for i in range(index,max_index+1):
                 # for meta_dict elements that not mapped into package_dict it will create a '' key in package_dict
                 package_dict[meta_dict[key.encode('utf-8')]] = value
         del package_dict['']
-        scraperwiki.sqlite.save(unique_keys=['id'],data=package_dict)
+        scraperwiki.sqlite.save(unique_keys=['today','id'],data=package_dict)
