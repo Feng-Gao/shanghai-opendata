@@ -47,6 +47,8 @@ meta_dict = {
 package_count = 0
 problem_list=[]
 
+today_date = datetime.date.today().strftime("%m/%d/%Y")
+
 for u in url_list:
     print(u)
     result = requests.get(u,headers=headers)
@@ -56,7 +58,7 @@ for u in url_list:
     for p in package_blocks:
         #we create a package_dict to store
         package_dict = {
-                'today':datetime.date.today().strftime("%m/%d/%Y"),
+                'today':today_date,
                 'id':0,
                 'url':'',
                 'name':'',
@@ -115,15 +117,15 @@ for u in url_list:
             print('*******************end'+package_dict['name']+'end****************************')
         except:
             print("add into problem_list to retry")
-            problem_list.append({'name':package_dict['name'],'url':package_dict['url'])
+            problem_list.append({'name':package_dict['name'],'url':package_dict['url']})
             continue
-            
+
 print(problem_list)
 
 for p in problem_list:
     #we create a package_dict to store
     package_dict = {
-            'today':datetime.date.today().strftime("%m/%d/%Y"),
+            'today':today_date,
             'id':0,
             'url':'',
             'name':'',
