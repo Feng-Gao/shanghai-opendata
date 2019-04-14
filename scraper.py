@@ -89,33 +89,35 @@ for u in url_list:
         #the first one contains metadata
         try:
             metadata_table = tables[0]
+
+            trs =  metadata_table.find_all('tr')
+            for tr in trs:
+                key = re.sub('[\r\t\n ]+', '', tr.th.text)
+                value = re.sub('[\r\t\n ]+', '', tr.td.text)
+                if key.encode('utf-8') == '访问/下载次数：'.encode('utf-8'):
+                    view,download = value.split('/')
+                    package_dict['count']['view'] = int(view)
+                    package_dict['count']['download'] = int(download)
+                if key.encode('utf-8') == '附件下载：'.encode('utf-8'):
+                    #datashanghai only contains image-based format list on its data package
+                    #we need to iterate each file's image to parse its format
+                    imgs = tr.find_all(src=re.compile("images/"))
+                    format = []
+                    for i in imgs:
+                        format.append(i['src'].split('/')[1].split('.')[0])
+                    format = '|'.join(format)
+                    package_dict['format'] = format
+                else:
+                    # for meta_dict elements that not mapped into package_dict it will create a '' key in package_dict
+                    package_dict[meta_dict[key.encode('utf-8')]] = value
+            del package_dict['']
+            scraperwiki.sqlite.save(unique_keys=['today','id'],data=package_dict)
+            print('*******************end'+package_dict['name']+'end****************************')
         except:
             print("add into problem_list to retry")
-            problem_list.append({'name':package_dict['name'],'url':package_dict['url']})
+            problem_list.append({'name':package_dict['name'],'url':package_dict['url'])
             continue
-        trs =  metadata_table.find_all('tr')
-        for tr in trs:
-            key = re.sub('[\r\t\n ]+', '', tr.th.text)
-            value = re.sub('[\r\t\n ]+', '', tr.td.text)
-            if key.encode('utf-8') == '访问/下载次数：'.encode('utf-8'):
-                view,download = value.split('/')
-                package_dict['count']['view'] = int(view)
-                package_dict['count']['download'] = int(download)
-            if key.encode('utf-8') == '附件下载：'.encode('utf-8'):
-                #datashanghai only contains image-based format list on its data package
-                #we need to iterate each file's image to parse its format
-                imgs = tr.find_all(src=re.compile("images/"))
-                format = []
-                for i in imgs:
-                    format.append(i['src'].split('/')[1].split('.')[0])
-                format = '|'.join(format)
-                package_dict['format'] = format
-            else:
-                # for meta_dict elements that not mapped into package_dict it will create a '' key in package_dict
-                package_dict[meta_dict[key.encode('utf-8')]] = value
-        del package_dict['']
-        scraperwiki.sqlite.save(unique_keys=['today','id'],data=package_dict)
-        print('*******************end'+package_dict['name']+'end****************************')
+            
 print(problem_list)
 
 for p in problem_list:
@@ -154,30 +156,31 @@ for p in problem_list:
     #the first one contains metadata
     try:
         metadata_table = tables[0]
+
+        trs =  metadata_table.find_all('tr')
+        for tr in trs:
+            key = re.sub('[\r\t\n ]+', '', tr.th.text)
+            value = re.sub('[\r\t\n ]+', '', tr.td.text)
+            if key.encode('utf-8') == '访问/下载次数：'.encode('utf-8'):
+                view,download = value.split('/')
+                package_dict['count']['view'] = int(view)
+                package_dict['count']['download'] = int(download)
+            if key.encode('utf-8') == '附件下载：'.encode('utf-8'):
+                #datashanghai only contains image-based format list on its data package
+                #we need to iterate each file's image to parse its format
+                imgs = tr.find_all(src=re.compile("images/"))
+                format = []
+                for i in imgs:
+                    format.append(i['src'].split('/')[1].split('.')[0])
+                format = '|'.join(format)
+                package_dict['format'] = format
+            else:
+                # for meta_dict elements that not mapped into package_dict it will create a '' key in package_dict
+                package_dict[meta_dict[key.encode('utf-8')]] = value
+        del package_dict['']
+        scraperwiki.sqlite.save(unique_keys=['today','id'],data=package_dict)
     except:
         print("add into problem_list to retry")
         problem_list.append(package_dict['url'])
         continue
-    trs =  metadata_table.find_all('tr')
-    for tr in trs:
-        key = re.sub('[\r\t\n ]+', '', tr.th.text)
-        value = re.sub('[\r\t\n ]+', '', tr.td.text)
-        if key.encode('utf-8') == '访问/下载次数：'.encode('utf-8'):
-            view,download = value.split('/')
-            package_dict['count']['view'] = int(view)
-            package_dict['count']['download'] = int(download)
-        if key.encode('utf-8') == '附件下载：'.encode('utf-8'):
-            #datashanghai only contains image-based format list on its data package
-            #we need to iterate each file's image to parse its format
-            imgs = tr.find_all(src=re.compile("images/"))
-            format = []
-            for i in imgs:
-                format.append(i['src'].split('/')[1].split('.')[0])
-            format = '|'.join(format)
-            package_dict['format'] = format
-        else:
-            # for meta_dict elements that not mapped into package_dict it will create a '' key in package_dict
-            package_dict[meta_dict[key.encode('utf-8')]] = value
-    del package_dict['']
-    scraperwiki.sqlite.save(unique_keys=['today','id'],data=package_dict)
     print('*******************end'+package_dict['name']+'end****************************')
