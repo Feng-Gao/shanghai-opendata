@@ -90,7 +90,7 @@ for u in url_list:
         try:
             metadata_table = tables[0]
         except:
-            print("add into problem_list to retry)
+            print("add into problem_list to retry")
             problem_list.append(package_dict['url'])
             continue
         trs =  metadata_table.find_all('tr')
