@@ -45,6 +45,7 @@ meta_dict = {
             '附件下载：'.encode('utf-8'):'',
             }
 package_count = 0
+problem_list=[]
 
 for u in url_list:
     print(u)
@@ -90,7 +91,7 @@ for u in url_list:
             metadata_table = tables[0]
         except:
             print("add into problem_list to retry)
-            url_list.append(package_dict['url'])
+            problem_list.append(package_dict['url'])
             continue
         trs =  metadata_table.find_all('tr')
         for tr in trs:
@@ -115,3 +116,4 @@ for u in url_list:
         del package_dict['']
         scraperwiki.sqlite.save(unique_keys=['today','id'],data=package_dict)
         print('*******************end'+package_dict['name']+'end****************************')
+print(problem_list)
