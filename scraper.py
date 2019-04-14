@@ -6,17 +6,22 @@ import re
 import scraperwiki
 import datetime
 
-import sys  
+import sys
 
-reload(sys)  
+reload(sys)
 sys.setdefaultencoding('utf8')
 
 #NOTE that we parse dataproduct and dataapi seperately and the dirty solution is manually replace the url and set index accordingly
 #this version is for dataproduct only now
-base_url = 'http://www.datashanghai.gov.cn/query!queryProduct.action?currentPage='
+base_url = 'http://data.sh.gov.cn/query!queryProduct.action?currentPage='
 index = 1
 #manually check on the website and set the max_index accordingly
 max_index = 137
+
+url_list = []
+
+for i in range(index, max_index+1):
+    url_list.append(base_url+str(i))
 
 #we need random ua to bypass website security check
 ua = UserAgent()
@@ -41,10 +46,9 @@ meta_dict = {
             }
 package_count = 0
 
-for i in range(index,max_index+1):
-    url = base_url + str(i)
-    print(url)
-    result = requests.get(url,headers=headers)
+for u in url_list:
+    print(u)
+    result = requests.get(u,headers=headers)
     soup = BeautifulSoup(result.content,features="lxml")
     #fetch all dt blocks and get rid of the first 5 as they are irrelevant
     package_blocks = soup.find_all('dt')[5:]
@@ -82,7 +86,12 @@ for i in range(index,max_index+1):
         #there are 4 tables on detail page
         tables = soup.find_all('table')
         #the first one contains metadata
-        metadata_table = tables[0]
+        try:
+            metadata_table = tables[0]
+        except:
+            print("add into problem_list to retry)
+            url_list.append(package_dict['url'])
+            continue
         trs =  metadata_table.find_all('tr')
         for tr in trs:
             key = re.sub('[\r\t\n ]+', '', tr.th.text)
