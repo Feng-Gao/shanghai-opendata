@@ -105,3 +105,4 @@ for i in range(index,max_index+1):
                 package_dict[meta_dict[key.encode('utf-8')]] = value
         del package_dict['']
         scraperwiki.sqlite.save(unique_keys=['today','id'],data=package_dict)
+        print(*******************'end'+package_dict['name']+'end'****************************)
