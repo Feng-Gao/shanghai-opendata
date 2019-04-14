@@ -91,7 +91,7 @@ for u in url_list:
             metadata_table = tables[0]
         except:
             print("add into problem_list to retry")
-            problem_list.append({'name':package_dict['name'],'url':package_dict['url'])
+            problem_list.append({'name':package_dict['name'],'url':package_dict['url']})
             continue
         trs =  metadata_table.find_all('tr')
         for tr in trs:
