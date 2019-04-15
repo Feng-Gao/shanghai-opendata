@@ -117,7 +117,8 @@ for u in url_list:
             scraperwiki.sqlite.save(unique_keys=['today','id'],data=package_dict)
            # print('*******************end'+package_dict['name']+'end****************************')
         except:
-            print("add into problem_list to retry")
+            print("on"+u+"\n")
+            print("add"+package_dict['url']+"into problem_list to retry")
             problem_list.append({'name':package_dict['name'],'url':package_dict['url'],'index':u})
             continue
 
@@ -184,7 +185,8 @@ for p in problem_list:
         del package_dict['']
         scraperwiki.sqlite.save(unique_keys=['today','id'],data=package_dict)
     except:
-        print("add into problem_list to retry")
+        print("in the retry process now\n")
+        print("add"+package_dict['url']+"into problem_list to retry")
         problem_list.append(package_dict['url'])
         continue
    # print('*******************end'+package_dict['name']+'end****************************')
