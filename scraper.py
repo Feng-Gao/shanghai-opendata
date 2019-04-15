@@ -50,7 +50,7 @@ problem_list=[]
 today_date = datetime.date.today().strftime("%m/%d/%Y")
 
 for u in url_list:
-    print(u)
+    #print(u)
     result = requests.get(u,headers=headers)
     soup = BeautifulSoup(result.content,features="lxml")
     #fetch all dt blocks and get rid of the first 5 as they are irrelevant
@@ -60,6 +60,7 @@ for u in url_list:
         package_dict = {
                 'today':today_date,
                 'id':0,
+                'index_url':u,
                 'url':'',
                 'name':'',
                 'desc':'',
@@ -81,8 +82,8 @@ for u in url_list:
         package_dict['name'] = p.a['title']
         package_dict['id'] = package_count+1
         package_count += 1
-        print(package_dict['url'])
-        print(package_dict['name'])
+       # print(package_dict['url'])
+       # print(package_dict['name'])
         result = requests.get(package_dict['url'],headers=headers)
         #now for each package block, we fetch back its detail page and parse its metadata
         soup = BeautifulSoup(result.content,features="lxml")
@@ -114,10 +115,10 @@ for u in url_list:
                     package_dict[meta_dict[key.encode('utf-8')]] = value
             del package_dict['']
             scraperwiki.sqlite.save(unique_keys=['today','id'],data=package_dict)
-            print('*******************end'+package_dict['name']+'end****************************')
+           # print('*******************end'+package_dict['name']+'end****************************')
         except:
             print("add into problem_list to retry")
-            problem_list.append({'name':package_dict['name'],'url':package_dict['url']})
+            problem_list.append({'name':package_dict['name'],'url':package_dict['url'],'index':u})
             continue
 
 print(problem_list)
@@ -127,6 +128,7 @@ for p in problem_list:
     package_dict = {
             'today':today_date,
             'id':0,
+            'index_url':p['index'],
             'url':'',
             'name':'',
             'desc':'',
@@ -148,8 +150,8 @@ for p in problem_list:
     package_dict['name'] = p['name']
     package_dict['id'] = package_count+1
     package_count += 1
-    print(package_dict['url'])
-    print(package_dict['name'])
+    #print(package_dict['url'])
+    #print(package_dict['name'])
     result = requests.get(package_dict['url'],headers=headers)
     #now for each package block, we fetch back its detail page and parse its metadata
     soup = BeautifulSoup(result.content,features="lxml")
@@ -185,4 +187,4 @@ for p in problem_list:
         print("add into problem_list to retry")
         problem_list.append(package_dict['url'])
         continue
-    print('*******************end'+package_dict['name']+'end****************************')
+   # print('*******************end'+package_dict['name']+'end****************************')
