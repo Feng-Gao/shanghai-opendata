@@ -14,9 +14,9 @@ sys.setdefaultencoding('utf8')
 #NOTE that we parse dataproduct and dataapi seperately and the dirty solution is manually replace the url and set index accordingly
 #this version is for dataproduct only now
 base_url = 'http://data.sh.gov.cn/query!queryProduct.action?currentPage='
-index = 1
+index = int(os.environ['MORPH_START'])
 #manually check on the website and set the max_index accordingly
-max_index = 137
+max_index = int(os.environ['MORPH_MAX'])
 
 url_list = []
 
