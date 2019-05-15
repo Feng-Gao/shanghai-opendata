@@ -79,7 +79,7 @@ for u in url_list:
                 'format':''
                }
         #for each package block on the list page, we parse the url to detail page, and package title
-        package_dict['url'] = "http://www.datashanghai.gov.cn/"+p.a['href']
+        package_dict['url'] = "http://www.data.sh.gov.cn/"+p.a['href']
         package_dict['name'] = p.a['title']
         package_dict['id'] = package_count+1
         package_count += 1
@@ -148,7 +148,7 @@ for p in problem_list:
             'format':''
            }
     #for each package block on the list page, we parse the url to detail page, and package title
-    package_dict['url'] = "http://www.datashanghai.gov.cn/"+p['url']
+    package_dict['url'] = "http://www.data.sh.gov.cn/"+p['url']
     package_dict['name'] = p['name']
     package_dict['id'] = package_count+1
     package_count += 1
